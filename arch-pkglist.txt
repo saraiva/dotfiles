@@ -1,17 +1,19 @@
 # Package list for my custom arch + gnome installation
 # Useful commands
 # * Get manually installed packages:
-#   $ comm <(pacman -Qettq) <(pacman -Qgq base-devel) -23
+#   $ comm <(pacman -Qettq | sort) <(pacman -Qgq base-devel | sort) -23
 # * Show manually installed packages not in this list
-#   $ comm <(cat arch-pkglist.txt | grep -v '^#' | sort) <(comm <(pacman -Qettq) <(pacman -Qgq base-devel) -23) -13
+#   $ comm <(cat arch-pkglist.txt | grep -v '^#' | sort) <(comm <(pacman -Qettq | sort) <(pacman -Qgq base-devel | sort) -23) -13
 # * Install all packages (you need yay installed)
 #   $ yay -S $(grep -v '^#' arch-pkglist.txt | xargs)
 
 # BASE
 base
 base-devel
+dash
 efibootmgr
 grub
+haveged
 linux
 linux-firmware
 
@@ -21,6 +23,7 @@ chrome-gnome-shell
 eog
 ffmpegthumbnailer
 file-roller
+flatpak
 gdm
 geary
 gedit
@@ -28,12 +31,15 @@ gedit-plugins
 gnome-calculator
 gnome-calendar
 gnome-clocks
+gnome-disk-utility
 gnome-documents
 gnome-font-viewer
 gnome-keyring
 gnome-screenshot
 gnome-shell
 gnome-shell-extensions
+gnome-software
+gnome-software-packagekit-plugin
 gnome-system-monitor
 gnome-terminal
 gnome-tweaks
@@ -49,14 +55,13 @@ gvfs-mtp
 gvfs-nfs
 gvfs-smb
 libgit2-glib
-lollypop
 nautilus
 networkmanager
 rygel
+seahorse
 sushi
 totem
 xdg-user-dirs-gtk
-youtube-dl
 
 # ZSH & TERMINAL
 bat

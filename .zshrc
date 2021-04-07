@@ -5,8 +5,8 @@ COLOR_SCHEME=dark # dark/light
 
 # --------------------------------- ALIASES -----------------------------------
 #alias ..='cd ..'
-alias cp='cp -iv'
-alias rm='rm -ir'
+alias cp='cp -v'
+alias rm='rm -Ir'
 alias mv='mv -iv'
 alias ln='ln -sriv'
 alias xclip='xclip -selection c'
@@ -32,12 +32,12 @@ command -v colorls > /dev/null && alias ls='colorls --sd --gs' && \
 
 ### CAT & LESS
 command -v bat > /dev/null && \
-	alias bat='bat --theme=ansi-$([ "$COLOR_SCHEME" = "light" ] && echo "light" || echo "dark")' && \
+	alias bat='bat --theme=ansi' && \
 	alias cat='bat --pager=never' && \
 	alias less='bat'
 # in debian the command is batcat
 command -v batcat > /dev/null && \
-	alias batcat='batcat --theme=ansi-$([ "$COLOR_SCHEME" = "light" ] && echo "light" || echo "dark")' && \
+	alias batcat='batcat --theme=ansi' && \
 	alias cat='batcat --pager=never' && \
 	alias less='batcat'
 
@@ -78,6 +78,8 @@ SAVEHIST=5000
 ZLE_RPROMPT_INDENT=0
 WORDCHARS=${WORDCHARS//\/}
 PROMPT_EOL_MARK=
+TIMEFMT=$'real\t%E\nuser\t%U\nsys\t%S\ncpu\t%P'
+
 
 # ZSH completion system
 autoload -Uz compinit
@@ -87,6 +89,7 @@ zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 
 # Key bindings
+bindkey -v
 bindkey '^U' backward-kill-line
 bindkey '^[[2~' overwrite-mode
 bindkey '^[[3~' delete-char
@@ -351,7 +354,7 @@ glog() {
 	setterm -linewrap off 2> /dev/null
 
 	git --no-pager log --all --color=always --graph --abbrev-commit --decorate --date-order \
-	--format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' \
+		--format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' "$@" \
 		| sed -E \
 			-e 's/\|(\x1b\[[0-9;]*m)+\\(\x1b\[[0-9;]*m)+ /├\1─╮\2/' \
 			-e 's/(\x1b\[[0-9;]+m)\|\x1b\[m\1\/\x1b\[m /\1├─╯\x1b\[m/' \
@@ -364,7 +367,7 @@ glog() {
 			-e 's/(\x1b\[[0-9;]*m)\//\1╯/g' \
 			-e 's/^\*|(\x1b\[m )\*/\1⎬/g' \
 			-e 's/(\x1b\[[0-9;]*m)\|/\1│/g' \
-		| command less -r +'/[^/]HEAD'
+		| command less -r $([ $# -eq 0 ] && echo "+/[^/]HEAD")
 
 	setterm -linewrap on 2> /dev/null
 }
